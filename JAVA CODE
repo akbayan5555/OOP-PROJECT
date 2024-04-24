@@ -1,0 +1,456 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+public class Login {
+    private static final String DB_URL = "jdbc:postgresql://localhost:5432/postgres"; //connection with database
+    private static final String USER = "postgres";
+    private static final String PASSWORD = "1234";
+
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Movie Manager");
+        frame.setSize(1500, 800);
+
+        JPanel panel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                ImageIcon imageIcon = new ImageIcon("C:\\Users\\User\\Pictures\\back.png");
+                g.drawImage(imageIcon.getImage(), 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+        panel.setLayout(null);
+        JLabel loginLabel = new JLabel("Name:");
+        loginLabel.setForeground(Color.WHITE);
+        loginLabel.setBounds(1200, 20, 150, 30);
+        JTextField loginField = new JTextField();
+        loginField.setBounds(1300, 20, 150, 30);
+
+        JLabel passwordLabel = new JLabel("Password:");
+        passwordLabel.setForeground(Color.WHITE);
+        passwordLabel.setBounds(1200, 60, 150, 30);
+        JPasswordField passwordField = new JPasswordField();
+        passwordField.setBounds(1300, 60, 150, 30);
+
+        JButton submitButton = new JButton("Log in");
+        submitButton.setBounds(1260, 120, 150, 30);
+
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String username = loginField.getText();
+                String password = new String(passwordField.getPassword());
+                if (authenticate(username, password)) {
+                    JOptionPane.showMessageDialog(null, "Login successful!");
+                    JFrame movieFrame = new JFrame("Movie Page");
+                    MoviePage moviePage = new MoviePage(); // Создание экземпляра класса MoviePage
+                    movieFrame.getContentPane().add(moviePage); // Добавление содержимого окна с фильмами на текущее окно
+                    movieFrame.pack();
+                    movieFrame.setLocationRelativeTo(null);
+                    movieFrame.setVisible(true);
+                    frame.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Invalid username or password");
+                }
+            }
+        });
+
+        panel.add(loginLabel);
+        panel.add(loginField);
+        panel.add(passwordLabel);
+        panel.add(passwordField);
+        panel.add(submitButton);
+
+        frame.add(panel);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+    }
+
+    private static boolean authenticate(String username, String password) {
+        String query = "SELECT * FROM users WHERE username=? AND password=?";
+        try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASSWORD);
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, username);
+            statement.setString(2, password);
+            ResultSet resultSet = statement.executeQuery();
+            return resultSet.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+}
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+public class MoviePage extends JPanel {
+    private static final int WIDTH = 1500;
+    private static final int HEIGHT = 800;
+
+    public MoviePage() {
+        prepareGUI();
+    }
+
+    private void prepareGUI() {
+        setPreferredSize(new Dimension(WIDTH, HEIGHT)); // Установка желаемого размера для JPanel
+
+        setLayout(new BorderLayout());
+
+        // Задний фон изображением
+        String imagePath = "C:\\Users\\User\\Pictures\\k.jpeg"; // Путь к изображению
+        ImageIcon backgroundImage = new ImageIcon(imagePath);
+        JLabel backgroundLabel = new JLabel(backgroundImage);
+        add(backgroundLabel, BorderLayout.CENTER);
+        backgroundLabel.setLayout(new BorderLayout());
+
+        // Шапка страницы
+        JLabel headerLabel = new JLabel(" Filmograf", JLabel.CENTER);
+        headerLabel.setFont(new Font(null, Font.BOLD, 50));
+        headerLabel.setForeground(Color.black);
+        backgroundLabel.add(headerLabel, BorderLayout.NORTH);
+
+        // Панель с кнопками категорий
+        JPanel categoryPanel = new JPanel(new FlowLayout());
+        categoryPanel.setOpaque(false); // Прозрачный фон
+        backgroundLabel.add(categoryPanel, BorderLayout.CENTER);
+
+        JButton allMoviesButton = new JButton("ALL");
+        JButton toWatchButton = new JButton("Want to see");
+        JButton favoriteButton = new JButton("Favorites");
+        JButton droppedButton = new JButton("Abandoned");
+
+        // Настройка стилей кнопок
+        Font buttonFont = new Font(null, Font.BOLD, 20);
+        allMoviesButton.setFont(buttonFont);
+        allMoviesButton.setBackground(Color.white);
+        toWatchButton.setFont(buttonFont);
+        toWatchButton.setBackground(Color.WHITE);
+        favoriteButton.setFont(buttonFont);
+        favoriteButton.setBackground(Color.WHITE);
+        droppedButton.setFont(buttonFont);
+        droppedButton.setBackground(Color.WHITE);
+
+        categoryPanel.add(allMoviesButton);
+        categoryPanel.add(toWatchButton);
+        categoryPanel.add(favoriteButton);
+        categoryPanel.add(droppedButton);
+
+        // Панель с кнопками действий
+        JPanel actionPanel = new JPanel(new FlowLayout());
+        actionPanel.setOpaque(false); // Прозрачный фон
+        backgroundLabel.add(actionPanel, BorderLayout.SOUTH);
+
+        JButton addButton = new JButton("Add a movie");
+        JButton searchButton = new JButton("Search");
+
+        addButton.setFont(buttonFont);
+        addButton.setBackground(Color.white);
+        searchButton.setFont(buttonFont);
+        searchButton.setBackground(Color.white);
+
+        // Обработчик для кнопки "Add a movie"
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Создаем диалоговое окно для ввода информации о фильме и выбора категории
+                JPanel panel = new JPanel(new GridLayout(7, 2));
+                JTextField titleField = new JTextField();
+                JTextField producerField = new JTextField();
+                JTextField yearField = new JTextField();
+                JTextField genreField = new JTextField();
+                JTextField languageField = new JTextField();
+                JTextArea plotArea = new JTextArea();
+                JComboBox<String> categoryComboBox = new JComboBox<>(new String[]{"All", "Want to see", "Favorites", "Abandoned"}); // Выпадающий список для выбора категории
+                panel.add(new JLabel("Title:"));
+                panel.add(titleField);
+                panel.add(new JLabel("Producer:"));
+                panel.add(producerField);
+                panel.add(new JLabel("Year:"));
+                panel.add(yearField);
+                panel.add(new JLabel("Genre:"));
+                panel.add(genreField);
+                panel.add(new JLabel("Language:"));
+                panel.add(languageField);
+                panel.add(new JLabel("Plot:"));
+                panel.add(plotArea);
+                panel.add(new JLabel("Category:"));
+                panel.add(categoryComboBox);
+
+                int result = JOptionPane.showConfirmDialog(null, panel, "Add a movie", JOptionPane.OK_CANCEL_OPTION);
+                if (result == JOptionPane.OK_OPTION) {
+                    // Получаем значения из полей
+                    String title = titleField.getText();
+                    String producer = producerField.getText();
+                    int year = Integer.parseInt(yearField.getText());
+                    String genre = genreField.getText();
+                    String language = languageField.getText();
+                    String plot = plotArea.getText();
+                    String category = (String) categoryComboBox.getSelectedItem(); // Получаем выбранную категорию
+
+                    // Вызываем метод для добавления фильма в соответствующую таблицу базы данных
+                    addMovie(title, producer, year, genre, language, plot, category);
+                }
+            }
+        });
+
+        // Обработчик для кнопки "Search"
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Создание экземпляра FilmografInterface
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        new FilmografInterface();
+                    }
+                });
+                // Закрытие текущего окна MoviePage
+                JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(MoviePage.this);
+                currentFrame.dispose();
+            }
+        });
+
+        // Обработчик для кнопки "Want to see"
+        toWatchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Открываем диалоговое окно со списком фильмов, которые хочется посмотреть
+                showMoviesDialog("want_to");
+            }
+        });
+
+        // Обработчик для кнопки "Favorites"
+        favoriteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Открываем диалоговое окно со списком избранных фильмов
+                showMoviesDialog("favorites");
+            }
+        });
+        allMoviesButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showMoviesDialog("movies");
+            }
+        });
+        droppedButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showMoviesDialog("Abandoned");
+            }
+        });
+        actionPanel.add(addButton);
+        actionPanel.add(searchButton);
+    }
+    // Метод для добавления записи в таблицу movies с указанием категории
+    private void addMovie(String title, String producer, int year, String genre, String language, String plot, String category) {
+        // Определяем имя таблицы в зависимости от выбранной категории
+        String tableName;
+        switch (category) {
+            case "Want to see":
+                tableName = "want_to";
+                break;
+            case "Favorites":
+                tableName = "favorites";
+                break;
+            case "Abandoned":
+                tableName = "abandoned";
+                break;
+            default:
+                tableName = "movies";
+                break;
+        }
+
+        String query = "INSERT INTO " + tableName + " (title, producer, year, genre, language, plot) VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "1234");
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, title);
+            preparedStatement.setString(2, producer);
+            preparedStatement.setInt(3, year);
+            preparedStatement.setString(4, genre);
+            preparedStatement.setString(5, language);
+            preparedStatement.setString(6, plot);
+            int rowsAffected = preparedStatement.executeUpdate();
+            System.out.println(rowsAffected + " row(s) affected");
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    // Метод для отображения списка фильмов из указанной таблицы в диалоговом окне
+    private void showMoviesDialog(String tableName) {
+        String query = "SELECT * FROM " + tableName;
+
+        try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "1234");
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int columnCount = metaData.getColumnCount();
+            Object[][] data = new Object[100][columnCount];
+            int rowCount = 0;
+            while (resultSet.next()) {
+                for (int i = 1; i <= columnCount; i++) {
+                    data[rowCount][i - 1] = resultSet.getObject(i);
+                }
+                rowCount++;
+            }
+            String[] columnNames = new String[columnCount];
+            for (int i = 1; i <= columnCount; i++) {
+                columnNames[i - 1] = metaData.getColumnLabel(i);
+            }
+
+            JTable table = new JTable(data, columnNames);
+            JScrollPane scrollPane = new JScrollPane(table);
+            JOptionPane.showMessageDialog(null, scrollPane, tableName, JOptionPane.PLAIN_MESSAGE);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Movie Page");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(WIDTH, HEIGHT);
+
+        MoviePage moviePage = new MoviePage();
+        frame.add(moviePage);
+
+        frame.setVisible(true);
+    }
+}
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.*;
+public class FilmografInterface extends JFrame {
+    private static final String DB_URL = "jdbc:postgresql://localhost:5432/postgres";
+    private static final String USER = "postgres";
+    private static final String PASSWORD = "1234";
+
+    private JTextField titleField;
+    private JTextField producerField;
+    private JTextField yearField;
+    private JTextField genreField;
+    private JTextField languageField;
+    private JTextArea resultArea;
+
+    public FilmografInterface() {
+        setTitle("Filmograf");
+        setSize(800, 600);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JPanel mainPanel = new JPanel(new BorderLayout());
+
+        // Название вверху по центру
+        JLabel titleLabel = new JLabel("Filmograf", JLabel.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        mainPanel.add(titleLabel, BorderLayout.NORTH);
+
+        // Панель с полями ввода критериев поиска
+        JPanel inputPanel = new JPanel(new GridLayout(6, 2));
+        titleField = new JTextField();
+        producerField = new JTextField();
+        yearField = new JTextField();
+        genreField = new JTextField();
+        languageField = new JTextField();
+        inputPanel.add(new JLabel("Title:"));
+        inputPanel.add(titleField);
+        inputPanel.add(new JLabel("Creator:"));
+        inputPanel.add(producerField);
+        inputPanel.add(new JLabel("Year:"));
+        inputPanel.add(yearField);
+        inputPanel.add(new JLabel("Genre:"));
+        inputPanel.add(genreField);
+        inputPanel.add(new JLabel("Language:"));
+        inputPanel.add(languageField);
+        mainPanel.add(inputPanel, BorderLayout.WEST);
+
+        // Панель для кнопки "Search" и "Back"
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JButton searchButton = new JButton("Search");
+        JButton backButton = new JButton("Back");
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                searchMovies();
+            }
+        });
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Создание экземпляра MoviePage
+                JFrame moviePageFrame = new JFrame("Movie Page");
+                MoviePage moviePage = new MoviePage();
+                moviePageFrame.add(moviePage);
+                moviePageFrame.setSize(1500, 800);
+                moviePageFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                moviePageFrame.setVisible(true);
+                // Закрытие текущего окна FilmografInterface
+                dispose();
+            }
+        });
+        buttonPanel.add(searchButton);
+        buttonPanel.add(backButton);
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        // Панель для вывода результатов поиска
+        resultArea = new JTextArea();
+        JScrollPane scrollPane = new JScrollPane(resultArea);
+        mainPanel.add(scrollPane, BorderLayout.CENTER);
+
+        add(mainPanel);
+        setVisible(true);
+    }
+
+    private void searchMovies() {
+        String title = titleField.getText();
+        String producer = producerField.getText();
+        String year = yearField.getText();
+        String genre = genreField.getText();
+        String language = languageField.getText();
+
+        String query = "SELECT * FROM movies WHERE 1=1";
+        if (!title.isEmpty()) query += " AND title LIKE '%" + title + "%'";
+        if (!producer.isEmpty()) query += " AND producer LIKE '%" + producer + "%'";
+        if (!year.isEmpty()) query += " AND year = " + year;
+        if (!genre.isEmpty()) query += " AND genre LIKE '%" + genre + "%'";
+        if (!language.isEmpty()) query += " AND language LIKE '%" + language + "%'";
+
+        try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASSWORD);
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
+            StringBuilder result = new StringBuilder();
+            while (resultSet.next()) {
+                result.append("Title: ").append(resultSet.getString("title")).append(", ");
+                result.append("Creator: ").append(resultSet.getString("producer")).append(", ");
+                result.append("Year: ").append(resultSet.getString("year")).append(", ");
+                result.append("Genre: ").append(resultSet.getString("genre")).append(", ");
+                result.append("Language: ").append(resultSet.getString("language")).append("\n");
+            }
+            resultArea.setText(result.toString());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            resultArea.setText("Request execution error");
+        }
+    }
+
+    public static void main(String[] args) {
+        new FilmografInterface();
+    }
+}
+
