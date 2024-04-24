@@ -1,0 +1,82 @@
+CREATE TABLE movies(
+title varchar(255),
+producer varchar(255),
+year int,
+genre varchar(255),
+language varchar(255),
+plot text
+);
+INSERT INTO movies (title, producer, year, genre, language, plot) 
+VALUES ('The Shawshank Redemption', 'Frank Darabont', 1994, 'Drama', 'English', 'Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.'),
+       ('The Godfather', 'Francis Ford Coppola', 1972, 'Crime', 'English', 'The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.'),
+       ('The Dark Knight', 'Christopher Nolan', 2008, 'Action', 'English', 'When the menace known as The Joker emerges from his mysterious past, he wreaks havoc and chaos on the people of Gotham.'),
+	   ('Forrest Gump', 'Robert Zemeckis', 1994, 'Drama', 'English', 'The presidencies of Kennedy and Johnson, the events of Vietnam, Watergate, and other historical events unfold from the perspective of an Alabama man with an IQ of 75, whose only desire is to be reunited with his childhood sweetheart.'),
+       ('Inception', 'Christopher Nolan', 2010, 'Sci-Fi', 'English', 'A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.'),
+       ('The Matrix', 'Lana Wachowski, Lilly Wachowski', 1999, 'Action', 'English', 'A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers.'),
+       ('Pulp Fiction', 'Quentin Tarantino', 1994, 'Crime', 'English', 'The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.'),
+       ('The Lord of the Rings: The Return of the King', 'Peter Jackson', 2003, 'Fantasy', 'English', 'Gandalf and Aragorn lead the World of Men against Saurons army to draw his gaze from Frodo and Sam as they approach Mount Doom with the One Ring.'),
+	   ('The Lord of the Rings: The Fellowship of the Ring', 'Peter Jackson', 2001, 'Fantasy', 'English', 'A meek Hobbit from the Shire and eight companions set out on a journey to destroy the powerful One Ring and save Middle-earth from the Dark Lord Sauron.'),
+       ('Fight Club', 'David Fincher', 1999, 'Drama', 'English', 'An insomniac office worker and a devil-may-care soap maker form an underground fight club that evolves into much more.'),
+	   ('Oldboy', 'Park Chan-wook', 2003, 'Drama', 'Korean', 'After being kidnapped and imprisoned for fifteen years, Oh Dae-Su is released, only to find that he must find his captor in five days.'),
+       ('Parasite', 'Bong Joon-ho', 2019, 'Thriller', 'Korean', 'Greed and class discrimination threaten the newly formed symbiotic relationship between the wealthy Park family and the destitute Kim clan.'),
+       ('Train to Busan', 'Yeon Sang-ho', 2016, 'Horror', 'Korean', 'While a zombie virus breaks out in South Korea, passengers struggle to survive on the train from Seoul to Busan.'),
+       ('The Handmaiden', 'Park Chan-wook', 2016, 'Thriller', 'Korean', 'A woman is hired as a handmaiden to a Japanese heiress, but secretly she is involved in a plot to defraud her.'),
+       ('Memories of Murder', 'Bong Joon-ho', 2003, 'Crime', 'Korean', 'In a small Korean province in 1986, two detectives struggle with the case of multiple young women being found raped and murdered by an unknown culprit.'),
+       ('The Host', 'Bong Joon-ho', 2006, 'Horror', 'Korean', 'A monster emerges from Seouls Han River and begins attacking people. One victims loving family does what it can to rescue her from its clutches.'),
+       ('Burning', 'Lee Chang-dong', 2018, 'Mystery', 'Korean', 'Jong-su, a part-time worker, bumps into Hae-mi while delivering, who used to live in the same neighborhood. Hae-mi asks him to look after her cat while shes on a trip to Africa.'),
+       ('The Wailing', 'Na Hong-jin', 2016, 'Horror', 'Korean', 'A stranger arrives in a little village and soon after a mysterious sickness starts spreading. A policeman is drawn into the incident and is forced to solve the mystery in order to save his daughter.'),
+       ('Mother', 'Bong Joon-ho', 2009, 'Drama', 'Korean', 'A mother desperately searches for the killer who framed her son for a girls horrific murder.'),
+       ('I Saw the Devil', 'Kim Jee-woon', 2010, 'Thriller', 'Korean', 'A secret agent exacts revenge on a serial killer through a series of captures and releases.'),
+	   ('Spirited Away', 'Hayao Miyazaki', 2001, 'Animation', 'Japanese', 'During her familys move to the suburbs, a sullen 10-year-old girl wanders into a world ruled by gods, witches, and spirits, and where humans are changed into beasts.'),
+       ('Your Name', 'Makoto Shinkai', 2016, 'Animation', 'Japanese', 'Two strangers find themselves linked in a bizarre way. When a connection forms, will distance be the only thing to keep them apart?'),
+       ('Akira', 'Katsuhiro Otomo', 1988, 'Animation', 'Japanese', 'A secret military project endangers Neo-Tokyo when it turns a biker gang member into a rampaging psychic psychopath who can only be stopped by two teenagers and a group of psychics.'),
+       ('Seven Samurai', 'Akira Kurosawa', 1954, 'Action', 'Japanese', 'A poor village under attack by bandits recruits seven unemployed samurai to help them defend themselves.'),
+       ('Rashomon', 'Akira Kurosawa', 1950, 'Crime', 'Japanese', 'The rape of a bride and the murder of her samurai husband are recalled from the perspectives of a bandit, the bride, the samurais ghost, and a woodcutter.'),
+       ('Grave of the Fireflies', 'Isao Takahata', 1988, 'Animation', 'Japanese', 'A young boy and his little sister struggle to survive in Japan during World War II.'),
+       ('Battle Royale', 'Kinji Fukasaku', 2000, 'Action', 'Japanese', 'In the future, the Japanese government captures a class of ninth-grade students and forces them to kill each other under the revolutionary "Battle Royale" act.'),
+       ('Princess Mononoke', 'Hayao Miyazaki', 1997, 'Animation', 'Japanese', 'On a journey to find the cure for a Tatarigamis curse, Ashitaka finds himself in the middle of a war between the forest gods and Tatara, a mining colony. In this quest, he also meets San, the Mononoke Hime.'),
+       ('Tokyo Story', 'Yasujirō Ozu', 1953, 'Drama', 'Japanese', 'An old couple visit their children and grandchildren in the city but receive little attention.'),
+       ('Audition', 'Takashi Miike', 1999, 'Horror', 'Japanese', 'A widower takes an offer to screen girls at a special audition, arranged for him by a friend to find him a new wife. The one he fancies is not who she appears to be after all.');
+	  SELECT*
+	  FROM movies;
+
+
+CREATE TABLE want_to(
+title varchar(255),
+producer varchar(255),
+year int,
+genre varchar(255),
+language varchar(255),
+plot text
+);
+INSERT INTO want_to (title, producer, year, genre, language, plot) 
+VALUES 
+('The Lion King', 'Roger Allers, Rob Minkoff', 1994, 'Animation, Adventure, Drama', 'English', 'Lion prince Simba and his father are targeted by his bitter uncle, who wants to ascend the throne himself.'),
+('Spirited Away', 'Hayao Miyazaki', 2001, 'Animation, Adventure, Family', 'Japanese', 'During her familys move to the suburbs, a sullen 10-year-old girl wanders into a world ruled by gods, witches, and spirits, and where humans are changed into beasts.'), 
+('The Shawshank Redemption', 'Frank Darabont', 1994, 'Drama', 'English', 'Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.'),
+('The Godfather', 'Francis Ford Coppola', 1972, 'Crime, Drama', 'English', 'The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.'),
+('Forrest Gump', 'Robert Zemeckis', 1994, 'Drama, Romance', 'English', 'The presidencies of Kennedy and Johnson, the Vietnam War, the Watergate scandal and other historical events unfold from the perspective of an Alabama man with an IQ of 75, whose only desire is to be reunited with his childhood sweetheart.'),
+('The Dark Knight', 'Christopher Nolan', 2008, 'Action, Crime, Drama', 'English', 'When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.'),
+('Fight Club', 'David Fincher', 1999, 'Drama', 'English', 'An insomniac office worker and a devil-may-care soapmaker form an underground fight club that evolves into something much, much more.'),
+('Pulp Fiction', 'Quentin Tarantino', 1994, 'Crime, Drama', 'English', 'The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.'),
+('The Matrix', 'Lana Wachowski, Lilly Wachowski', 1999, 'Action, Sci-Fi', 'English', 'A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers.'),
+('Interstellar', 'Christopher Nolan', 2014, 'Adventure, Drama, Sci-Fi', 'English', 'A team of explorers travel through a wormhole in space in an attempt to ensure humanitys survival.');
+
+SELECT*FROM want_to;
+
+
+CREATE TABLE favorites(
+title varchar(255),
+producer varchar(255),
+year int,
+genre varchar(255),
+language varchar(255),
+plot text
+);
+INSERT INTO want_to (title, producer, year, genre, language, plot) 
+VALUES 
+('Inception', 'Christopher Nolan', 2010, 'Action, Adventure, Sci-Fi', 'English', 'A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.'),
+('The Lord of the Rings: The Return of the King', 'Peter Jackson', 2003, 'Adventure, Drama, Fantasy', 'English', 'Gandalf and Aragorn lead the World of Men against Saurons army to draw his gaze from Frodo and Sam as they approach Mount Doom with the One Ring.'),
+('Gladiator', 'Ridley Scott', 2000, 'Action, Adventure, Drama', 'English', 'A former Roman General sets out to exact vengeance against the corrupt emperor who murdered his family and sent him into slavery.'),
+('The Silence of the Lambs', 'Jonathan Demme', 1991, 'Crime, Drama, Thriller', 'English', 'A young F.B.I. cadet must receive the help of an incarcerated and manipulative cannibal killer to help catch another serial killer, a madman who skins his victims.'),
+('The Prestige', 'Christopher Nolan', 2006, 'Drama, Mystery, Sci-Fi', 'English', 'After a tragic accident, two stage magicians engage in a battle to create the ultimate illusion while sacrificing everything they have to outwit each other.');
